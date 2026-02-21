@@ -90,10 +90,66 @@ class Hotel:
 
 class Customer:
     """Clase que representa la abstracción de un Cliente."""
+    FILE_PATH = "data/customers.json"
+    
     def __init__(self, customer_id, name, email):
         self.customer_id = customer_id
         self.name = name
         self.email = email
+
+    @staticmethod
+    def _load_data():
+        """Carga datos de clientes manejando errores de archivo."""
+        try:
+            if not os.path.exists(Customer.FILE_PATH):
+                return []
+            with open(Customer.FILE_PATH, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"Error en datos de clientes: {e}. Continuando...")
+            return []
+
+    @staticmethod
+    def _save_data(data):
+        """Guarda la lista de clientes en el archivo JSON."""
+        with open(Customer.FILE_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+
+    def create_customer(self):
+        """Crea un nuevo registro de cliente."""
+        customers = self._load_data()
+        customers.append(self.__dict__)
+        self._save_data(customers)
+
+    @classmethod
+    def delete_customer(cls, customer_id):
+        """Elimina un cliente por su ID."""
+        customers = [c for c in cls._load_data() if c['customer_id'] != customer_id]
+        cls._save_data(customers)
+
+    @classmethod
+    def display_info(cls, customer_id):
+        """Muestra información de un cliente específico."""
+        customers = cls._load_data()
+        for c in customers:
+            if c['customer_id'] == customer_id:
+                print(f"Cliente: {c['name']}, Email: {c['email']}")
+                return c
+        return None
+
+    @classmethod
+    def modify_customer_info(cls, customer_id, new_name=None, new_email=None):
+        """Modifica los datos de un cliente existente."""
+        customers = cls._load_data()
+        for c in customers:
+            if c['customer_id'] == customer_id:
+                if new_name:
+                    c['name'] = new_name
+                if new_email:
+                    c['email'] = new_email
+                cls._save_data(customers)
+                return True
+        return False
 
 class Reservation:
     """Clase que vincula un Cliente con un Hotel."""
