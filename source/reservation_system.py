@@ -153,7 +153,40 @@ class Customer:
 
 class Reservation:
     """Clase que vincula un Cliente con un Hotel."""
+    FILE_PATH = "data/reservations.json"
+
     def __init__(self, reservation_id, customer_id, hotel_id):
         self.reservation_id = reservation_id
         self.customer_id = customer_id
         self.hotel_id = hotel_id
+    
+    @staticmethod
+    def _load_data():
+        """Carga reservaciones manejando errores de formato."""
+        try:
+            if not os.path.exists(Reservation.FILE_PATH):
+                return []
+            with open(Reservation.FILE_PATH, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"Error en datos de reservaciones: {e}. Continuando...")
+            return []
+
+    @staticmethod
+    def _save_data(data):
+        """Guarda la lista de reservaciones en JSON."""
+        with open(Reservation.FILE_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+
+    def create_reservation(self):
+        """Crea una reservación vinculando Cliente y Hotel."""
+        # Se asume que el hotel tiene disponibilidad (lógica manejada en Hotel.reserve_room)
+        reservations = self._load_data()
+        reservations.append(self.__dict__)
+        self._save_data(reservations)
+
+    @classmethod
+    def cancel_reservation(cls, reservation_id):
+        """Cancela una reservación existente."""
+        reservations = [r for r in cls._load_data() if r['reservation_id'] != reservation_id]
+        cls._save_data(reservations)
