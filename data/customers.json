@@ -1,12 +1,1 @@
-[
-    {
-        "customer_id": 101,
-        "name": "Gloria Campos",
-        "email": "gloria.campos@testmail.com"
-    },
-    {
-        "customer_id": 102,
-        "name": "María García",
-        "email": "m.garcia@testmail.com"
-    }
-]
+[]

@@ -1,12 +1,1 @@
-[
-    {
-        "hotel_id": 1,
-        "name": "Grand Hotel Boutique",
-        "total_rooms": 100
-    },
-    {
-        "hotel_id": 2,
-        "name": "Hotel Argento",
-        "total_rooms": 45
-    }
-]
+[]
