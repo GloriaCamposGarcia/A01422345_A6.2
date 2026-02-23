@@ -39,6 +39,18 @@ class TestReservationSystem(unittest.TestCase):
         Hotel.delete_hotel(1)
         self.assertIsNone(Hotel.display_info(1))
 
+    def test_hotel_reserve_no_rooms(self):
+        """Prueba de reservar en hotel sin disponibilidad."""
+        hotel = Hotel(2, "Hotel Sin Cuartos", 0)
+        hotel.create_hotel()
+        result = Hotel.reserve_room(2)
+        self.assertFalse(result)
+
+    def test_modify_nonexistent_hotel(self):
+        """Prueba modificar hotel inexistente."""
+        result = Hotel.modify_hotel_info(999, new_name="No existe")
+        self.assertFalse(result)
+
     def test_customer_operations(self):
         """Prueba de la gestión de clientes."""
         customer = Customer(101, "Jose Diaz", "jose@test.com")
