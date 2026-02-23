@@ -3,6 +3,7 @@ import os
 
 """Módulo que contiene las abstracciones para el sistema de reservaciones."""
 
+
 class Hotel:
     """Clase que representa la abstracción de un Hotel."""
     FILE_PATH = "data/hotels.json"
@@ -51,6 +52,7 @@ class Hotel:
                 print(f"Hotel: {h['name']}, Habitaciones: {h['total_rooms']}")
                 return h
         return None
+
     @classmethod
     def modify_hotel_info(cls, hotel_id, new_name=None, new_rooms=None):
         """Modifica la información de un hotel existente."""
@@ -88,10 +90,11 @@ class Hotel:
                 return True
         return False
 
+
 class Customer:
     """Clase que representa la abstracción de un Cliente."""
     FILE_PATH = "data/customers.json"
-    
+
     def __init__(self, customer_id, name, email):
         self.customer_id = customer_id
         self.name = name
@@ -124,7 +127,10 @@ class Customer:
     @classmethod
     def delete_customer(cls, customer_id):
         """Elimina un cliente por su ID."""
-        customers = [c for c in cls._load_data() if c['customer_id'] != customer_id]
+        customers = [
+            c for c in cls._load_data()
+            if c['customer_id'] != customer_id
+        ]
         cls._save_data(customers)
 
     @classmethod
@@ -151,6 +157,7 @@ class Customer:
                 return True
         return False
 
+
 class Reservation:
     """Clase que vincula un Cliente con un Hotel."""
     FILE_PATH = "data/reservations.json"
@@ -159,7 +166,7 @@ class Reservation:
         self.reservation_id = reservation_id
         self.customer_id = customer_id
         self.hotel_id = hotel_id
-    
+
     @staticmethod
     def _load_data():
         """Carga reservaciones manejando errores de formato."""
@@ -180,7 +187,7 @@ class Reservation:
 
     def create_reservation(self):
         """Crea una reservación vinculando Cliente y Hotel."""
-        # Se asume que el hotel tiene disponibilidad (lógica manejada en Hotel.reserve_room)
+        # Se asume que el hotel tiene disponibilidad (Hotel.reserve_room)
         reservations = self._load_data()
         reservations.append(self.__dict__)
         self._save_data(reservations)
@@ -188,5 +195,7 @@ class Reservation:
     @classmethod
     def cancel_reservation(cls, reservation_id):
         """Cancela una reservación existente."""
-        reservations = [r for r in cls._load_data() if r['reservation_id'] != reservation_id]
+        reservations = [
+            r for r in cls._load_data()
+            if r['reservation_id'] != reservation_id]
         cls._save_data(reservations)
