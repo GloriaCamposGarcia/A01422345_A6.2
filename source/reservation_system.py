@@ -27,7 +27,8 @@ class Hotel:
 
     @classmethod
     def safe_load_data(cls):
-        """Método público para cargar datos de hotel sin acceder a _load_data.""" 
+        """Método público para cargar datos
+        del hotel sin acceder a _load_data."""
         return cls._load_data()
 
     @staticmethod
