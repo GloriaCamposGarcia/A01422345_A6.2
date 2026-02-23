@@ -55,23 +55,23 @@ class TestReservationSystem(unittest.TestCase):
         res.create_reservation()
 
         # Verificar que existe en el archivo
-        with open(self.res_file, 'r') as f:
+        with open(self.res_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         self.assertEqual(len(data), 1)
 
         # Cancelar reservación (Req 2.3b)
         Reservation.cancel_reservation(500)
-        with open(self.res_file, 'r') as f:
+        with open(self.res_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         self.assertEqual(len(data), 0)
 
     def test_invalid_json_handling(self):
         """Validación del sistema de manejar archivos corruptos."""
-        with open(self.hotel_file, 'w') as f:
+        with open(self.hotel_file, 'w', encoding='utf-8') as f:
             f.write("ESTO_NO_ES_JSON")
 
         # El sistema debe mostrar el error y devolver una lista vacía
-        result = Hotel._load_data()
+        result = Hotel.safe_load_data()  # wrapper público
         self.assertEqual(result, [])
 
 

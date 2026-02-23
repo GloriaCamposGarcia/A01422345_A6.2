@@ -1,7 +1,7 @@
+"""Módulo que contiene las abstracciones para el sistema de reservaciones."""
+
 import json
 import os
-
-"""Módulo que contiene las abstracciones para el sistema de reservaciones."""
 
 
 class Hotel:
@@ -24,6 +24,11 @@ class Hotel:
         except (json.JSONDecodeError, IOError) as e:
             print(f"Error al leer datos de hoteles: {e}. Continuando...")
             return []
+
+    @classmethod
+    def safe_load_data(cls):
+        """Método público para cargar datos de hotel sin acceder a _load_data.""" 
+        return cls._load_data()
 
     @staticmethod
     def _save_data(data):
